@@ -1,22 +1,53 @@
 import React from "react"
-import { Link } from "gatsby"
 
-import Layout from "../components/layout"
-import Image from "../components/image"
+import Content from "../components/content"
 import SEO from "../components/seo"
+import List from "../components/list"
+import Switch from "../components/switch"
+import Footer from "../components/footer"
+import Hexagon from "../components/hexagon"
+import "../styles/global.css"
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link> <br />
-    <Link to="/using-typescript/">Go to "Using TypeScript"</Link>
-  </Layout>
-)
+class IndexPage extends React.Component {
+  state = {
+    lang: true,
+    userLang: "",
+  }
+
+  componentDidMount() {
+    const lang = window.navigator.language;
+    this.setState({ userLang: lang })
+    if (lang.substring(0, 2).toLowerCase() === "ru") {
+      this.setState({ lang })
+    } else {
+      this.setState({ lang: !this.state.lang })
+    }
+  }
+
+  setLang = () => {
+    this.setState({ lang: !this.state.lang })
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+  })
+  }
+
+  render() {
+    return (
+      <>
+        <SEO title="IT-company K&K TEAM" lang={this.state.userLang} image={require("../images/social.png")}/>
+        <div className="main">
+          <Content lang={this.state.lang} />
+          <div className="info">
+            <List lang={this.state.lang} />
+            <Switch lang={this.state.lang} onClick={this.setLang} />
+          </div>
+          <Footer lang={this.state.lang} />
+          <Hexagon />
+        </div>
+      </>
+    )
+  }
+}
 
 export default IndexPage
